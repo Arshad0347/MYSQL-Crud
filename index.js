@@ -6,22 +6,24 @@ app.use(express.json());
 
 app.post('/AddUser',(req,res)=>{//Add User in MySql
     const data={
-        name:req.body.name,
-        rollno:req.body.rollno,
+        fullname:req.body.fullname,
         email:req.body.email,
-        phone:req.body.mobile
+        phone:req.body.mobile,
+        father:req.body.father,
+        mother:req.body.mother,
+        city:req.body.city
     }
     // console.log(data);
-    const sql="INSERT INTO `studentsdata` SET ?";
+    const sql="INSERT INTO `studentrecords` SET ?";
     database.query(sql,data,(error,result)=>{
         if(error)console.log(error.sqlMessage);
-        else res.json()
+        else res.json(result)
     })
     
 })
 
-app.get('/getUser',(req,res)=>{ //get user by database
-    const sql="SELECT * FROM `studentsdata`";
+app.get('/getUser',(req,res)=>{ //get all user by database
+    const sql="SELECT * FROM `studentrecords`";
     database.query(sql,(error,result)=>{
         if(error)console.log(error.sqlMessage);
         else res.json(result)
@@ -36,8 +38,8 @@ app.get('/getUser',(req,res)=>{ //get user by database
 //     })
 // })
 
-app.post('/updateUseremail:email',(req,res)=>{
-    const sql="UPDATE `studentsdata` SET `email`=?";
+app.post('/updateUser:email',(req,res)=>{
+    const sql="UPDATE `studentrecords` SET `email`=?";
     database.query(sql,[req.body.email],(error,result)=>{
         if(error) console.log(error,sqlMessage);
         else res.json()
@@ -47,9 +49,9 @@ app.post('/updateUseremail:email',(req,res)=>{
 
 
 app.post('/update',(req,res)=>{
-    const sql="UPDATE `studentsdata` SET `name`=?,`rollno`=?,`email`=?,`phone`=?";
+    const sql="UPDATE `studentrecords` SET `fullname`='[henry]',`email`='[henry@gmail.com]',`phone`='[9846586445-3]',`father`='[jospeh]',`mother`='[jane]',`city`='[pune]' WHERE 1"
     database.query(sql,
-        [req.body.name,req.body.rollno,req.body.email,req.body.phone],
+        [req.body.fullname,req.body.email,req.body.mobile,req.body.father,req.body.mother,req.body.city],
         (error,result)=>{
             if(error) console.log(error);
             else res.json()
@@ -57,22 +59,17 @@ app.post('/update',(req,res)=>{
     )
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+app.delete("/deleteUser/:email", (req, res) => {
+    const sql = 'DELETE FROM studentrecords WHERE email = ?'; 
+    database.query(sql, [req.params.email], (error, result) => { 
+        if (error) {
+            console.log(error);
+            res.status(500).json({ error: "Database error" });
+        } else {
+            res.json(result);
+        }
+    });
+});
 
 
 app.listen(PORT,()=>{
