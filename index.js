@@ -46,6 +46,17 @@ app.post('/updateUseremail:email',(req,res)=>{
 })
 
 
+app.post('/update',(req,res)=>{
+    const sql="UPDATE `studentsdata` SET `name`=?,`rollno`=?,`email`=?,`phone`=?";
+    database.query(sql,
+        [req.body.name,req.body.rollno,req.body.email,req.body.phone],
+        (error,result)=>{
+            if(error) console.log(error);
+            else res.json()
+        }
+    )
+})
+
 
 
 
