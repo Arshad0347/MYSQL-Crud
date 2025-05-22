@@ -4,7 +4,7 @@ const app=express();
 const database=require('./modules/connections');
 app.use(express.json());
 
-app.post('/AddUser',(req,res)=>{
+app.post('/AddUser',(req,res)=>{//Add User in MySql
     const data={
         name:req.body.name,
         rollno:req.body.rollno,
@@ -19,6 +19,16 @@ app.post('/AddUser',(req,res)=>{
     })
     
 })
+
+app.get('/getUser',(req,res)=>{ //get user by database
+    const sql="SELECT * FROM `studentsdata`";
+    database.query(sql,(error,result)=>{
+        if(error)console.log(error.sqlMessage);
+        else res.json(result)
+    })
+})
+
+
 
 
 
